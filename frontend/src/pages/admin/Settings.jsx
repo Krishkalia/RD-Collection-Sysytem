@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Settings as SettingsIcon, Bell, Lock, Globe, Shield } from 'lucide-react';
+import { Settings as SettingsIcon, Bell, Lock, Globe, Shield, RefreshCw } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const Settings = () => {
   const [config, setConfig] = useState({
@@ -42,14 +43,20 @@ const Settings = () => {
     setSaving(true);
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/setting/batch`, config);
-      alert('Settings saved successfully!');
+      toast.success('Settings saved successfully!');
     } catch (err) {
       console.error(err);
-      alert('Failed to save settings.');
+      toast.error('Failed to save settings.');
     } finally {
       setSaving(false);
     }
   };
+
+  if (loading) return (
+    <div className="d-flex justify-content-center align-items-center" style={{ height: '70vh' }}>
+      <div className="spinner-border text-primary" role="status"></div>
+    </div>
+  );
 
   return (
     <div className="fade-in">
@@ -151,11 +158,15 @@ const Settings = () => {
 
               <div className="text-end mt-4">
                 <button 
-                  className="btn btn-primary-custom px-5"
+                  className="btn btn-primary-custom px-5 py-2 fw-bold d-flex align-items-center gap-2 ms-auto"
                   onClick={handleSave}
                   disabled={saving}
                 >
-                  {saving ? 'Saving...' : 'Save Configuration'}
+                  {saving ? (
+                    <><RefreshCw size={18} className="spin" /> Saving...</>
+                  ) : (
+                    'Save Configuration'
+                  )}
                 </button>
               </div>
 

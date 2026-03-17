@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Calendar, Download, Filter } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const DailyReports = () => {
   const [reportData, setReportData] = useState([]);
@@ -22,7 +23,7 @@ const DailyReports = () => {
   };
 
   const handleExport = () => {
-    if (reportData.length === 0) return alert('No data to export');
+    if (reportData.length === 0) return toast.error('No data to export');
     
     const headers = ['Agent Name', 'Entries Count', 'Total Collected'];
     const rows = reportData.map(item => [

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CreditCard, Save, X } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const NewTransaction = () => {
     const [searchParams] = useSearchParams();
@@ -47,10 +48,10 @@ const NewTransaction = () => {
             }, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('rdToken')}` }
             });
-            alert('Collection recorded successfully!');
+            toast.success('Collection recorded successfully!');
             navigate('/agent/collections');
         } catch (err) {
-            alert(err.response?.data?.error || 'Failed to record transaction');
+            toast.error(err.response?.data?.error || 'Failed to record transaction');
         } finally {
             setLoading(false);
         }

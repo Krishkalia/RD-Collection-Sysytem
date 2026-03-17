@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BookOpen, Search, Download } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const MyPassbook = () => {
     const [transactions, setTransactions] = useState([]);
@@ -30,7 +31,7 @@ const MyPassbook = () => {
     );
 
     const handleExport = () => {
-        if (transactions.length === 0) return alert('No transactions to export');
+        if (transactions.length === 0) return toast.error('No transactions to export');
         
         const headers = ['Date', 'Account Number', 'Plan', 'Installment #', 'Amount', 'Mode', 'Status'];
         const rows = transactions.map(tx => [

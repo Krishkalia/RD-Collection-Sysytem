@@ -48,10 +48,10 @@ const Profile = () => {
             await axios.put(`${import.meta.env.VITE_API_URL}/api/customer/profile`, formData);
             setProfile({ ...profile, ...formData });
             setIsEditing(false);
-            alert('Profile updated successfully!');
+            toast.success('Profile updated successfully!');
         } catch (err) {
             console.error(err);
-            alert('Failed to update profile.');
+            toast.error('Failed to update profile.');
         } finally {
             setSaving(false);
         }
@@ -62,10 +62,10 @@ const Profile = () => {
         try {
             await axios.put(`${import.meta.env.VITE_API_URL}/api/auth/change-password`, passwords);
             setPasswords({ oldPassword: '', newPassword: '' });
-            alert('Password updated successfully!');
+            toast.success('Password updated successfully!');
         } catch (err) {
             console.error(err);
-            alert(err.response?.data?.error || 'Failed to update password.');
+            toast.error(err.response?.data?.error || 'Failed to update password.');
         }
     };
 
