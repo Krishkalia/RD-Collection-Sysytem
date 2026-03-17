@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Users, UserCheck, IndianRupee, Layers, TrendingUp } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -30,6 +31,7 @@ const AdminDashboard = () => {
         setStats(res.data);
       } catch (err) {
         console.error('Failed to fetch stats', err);
+        toast.error('Failed to load dashboard statistics.');
       } finally {
         setLoading(false);
       }

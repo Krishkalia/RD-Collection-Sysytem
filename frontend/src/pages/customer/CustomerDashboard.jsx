@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Wallet, PieChart, Clock, ArrowUpRight } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const CustomerDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -22,6 +23,7 @@ const CustomerDashboard = () => {
         setTransactions(transRes.data.slice(0, 5)); // Only show last 5
       } catch (err) {
         console.error('Failed to fetch dashboard data', err);
+        toast.error('Failed to load your dashboard summary.');
       } finally {
         setLoading(false);
       }

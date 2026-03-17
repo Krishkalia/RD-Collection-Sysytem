@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Users, Target, CheckCircle, Clock, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const AgentDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -17,6 +18,7 @@ const AgentDashboard = () => {
         setStats(res.data);
       } catch (err) {
         console.error(err);
+        toast.error('Failed to load agent dashboard data.');
       } finally {
         setLoading(false);
       }
