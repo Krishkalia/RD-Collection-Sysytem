@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DollarSign, Send, History, CheckCircle, RefreshCw } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const CommissionPayouts = () => {
   const [stats, setStats] = useState({ pending: 0, totalPaid: 0 });
@@ -168,4 +169,3 @@ const CommissionPayouts = () => {
 };
 
 export default CommissionPayouts;
-ayouts;
