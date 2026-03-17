@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RD Collection System - Secure Your Future</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9d25f4",
+                        "accent": "#00f2ff",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#0a0510",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(26, 16, 34, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(157, 37, 244, 0.2);
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(157, 37, 244, 0.4);
+        }
+        .floating-element {
+            position: absolute;
+            z-index: 0;
+            filter: blur(40px);
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen overflow-x-hidden">
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+<div class="floating-element bg-primary w-96 h-96 rounded-full -top-20 -left-20"></div>
+<div class="floating-element bg-accent w-80 h-80 rounded-full top-1/2 -right-20"></div>
+<div class="floating-element bg-primary/40 w-64 h-64 rounded-full bottom-0 left-1/3"></div>
+</div>
+<div class="relative z-10 flex flex-col min-h-screen">
+<header class="flex items-center justify-between px-6 lg:px-20 py-6 border-b border-primary/10">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg text-white">
+<span class="material-symbols-outlined text-2xl">account_balance_wallet</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">RD <span class="text-primary">System</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Features</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Security</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-sm font-medium hover:text-primary">Sign In</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm font-bold neon-glow transition-all">
+                    Get Started
+                </button>
+</div>
+</header>
+<main class="flex-1 flex flex-col lg:flex-row items-center px-6 lg:px-20 py-12 gap-12 lg:gap-20">
+<div class="flex-1 flex flex-col gap-8 max-w-2xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                    Next-Gen Wealth Management
+                </div>
+<h1 class="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-slate-900 dark:text-white">
+                    Secure Your Future with <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Recurring Deposits</span>
+</h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-lg">
+                    Experience the next generation of financial stability with our futuristic collection ecosystem. Smart tracking, automated growth, and bank-grade security.
+                </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-lg hover:translate-y-[-2px] transition-transform neon-glow">
+                        Get Started
+                    </button>
+<button class="bg-slate-200 dark:bg-primary/10 border border-primary/20 text-slate-900 dark:text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-primary/20 transition-all">
+                        Learn More
+                    </button>
+</div>
+<div class="flex items-center gap-8 mt-4">
+<div class="flex flex-col">
+<span class="text-3xl font-bold">12k+</span>
+<span class="text-sm text-slate-500">Active Users</span>
+</div>
+<div class="h-10 w-px bg-primary/20"></div>
+<div class="flex flex-col">
+<span class="text-3xl font-bold">$4.2B</span>
+<span class="text-sm text-slate-500">Assets Managed</span>
+</div>
+</div>
+</div>
+<div class="flex-1 w-full max-w-md relative">
+<div class="absolute -inset-4 bg-primary/20 blur-2xl rounded-3xl"></div>
+<div class="glass-panel relative rounded-3xl p-8 shadow-2xl overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-20">
+<span class="material-symbols-outlined text-6xl text-primary">security</span>
+</div>
+<div class="mb-8">
+<h3 class="text-2xl font-bold mb-2">Login to Portal</h3>
+<p class="text-slate-400 text-sm">Enter your credentials to access your dashboard</p>
+</div>
+<form class="space-y-6">
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-300 ml-1">Email Address</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">mail</span>
+<input class="w-full bg-background-dark/50 border-primary/20 focus:border-primary focus:ring-primary/20 rounded-xl py-4 pl-12 text-white placeholder:text-slate-600 transition-all" placeholder="name@company.com" type="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-300 ml-1">Password</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">lock</span>
+<input class="w-full bg-background-dark/50 border-primary/20 focus:border-primary focus:ring-primary/20 rounded-xl py-4 pl-12 pr-12 text-white placeholder:text-slate-600 transition-all" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between text-xs sm:text-sm">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded border-primary/20 bg-background-dark text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-slate-400">Remember me</span>
+</label>
+<a class="text-primary font-medium hover:underline" href="#">Forgot password?</a>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2" type="submit">
+<span>Proceed to Secure Login</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<div class="relative py-2">
+<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-primary/10"></div></div>
+<div class="relative flex justify-center text-xs uppercase"><span class="bg-background-dark/60 px-2 text-slate-500">Or continue with</span></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2 py-3 border border-primary/20 rounded-xl hover:bg-primary/5 transition-colors" type="button">
+<img alt="Google" class="w-5 h-5" data-alt="Google logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcdBO_oGx4bK_jbCOVmfEwpLqTIaWQe4iYIV1lTQOl2iRrzOXDqGTms6gE8KuChnoHhXpcwD5JvJBhy2Guevs4QKTh_QO3wbX6L8782z0M6QTD0KTP4n-2X1S5f6it4EXv4ZE4QK859qQT8BPSwHpEBhncMGvwEzIMfPgiJo-hqIXveQ-7VXiKkzaPyssMpAc-ouEuzToq6qS4F4ddPlBNqQmV8RvKhCpd6u0rtRRfzVnnNJkXernVVzm0D_EjEYts83pQBFQNtq_M"/>
+<span class="text-sm font-medium">Google</span>
+</button>
+<button class="flex items-center justify-center gap-2 py-3 border border-primary/20 rounded-xl hover:bg-primary/5 transition-colors" type="button">
+<img alt="Apple" class="w-5 h-5" data-alt="Apple logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTdlCCDiS4GbS1d9hTcYJok-EcScKkaTKLIhZ4dKlU9QBx9TkDoFcMPw8ZnCRqBVEP3W2p7dIDfzbDU-t_So56mgqTQNWPa8RcCjMGigq521uBO6bjITotg3rDTwi4ttieCFAmXqhDKylW2uCOM7roL1KSRFXDuIK2vI5hPx-ZkQaUumgU_AF61hGh30RcIG-mOvuKskZL4g-dRlKgWuImG2TyHYDK1GuWCkC9WByMRLBsW1yu-Mawfs-DcWp6tw8TiHhV-4Pr5k6O"/>
+<span class="text-sm font-medium">Apple ID</span>
+</button>
+</div>
+</form>
+<p class="mt-8 text-center text-sm text-slate-500">
+                        Don't have an account? <a class="text-primary font-bold hover:underline" href="#">Register now</a>
+</p>
+</div>
+<div class="absolute -bottom-10 -left-10 w-32 h-32 bg-accent/20 rounded-full blur-xl animate-pulse"></div>
+</div>
+</main>
+<footer class="px-6 lg:px-20 py-8 border-t border-primary/10 mt-auto">
+<div class="flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="text-slate-500 text-sm">
+                    © 2024 RD Collection System. All rights reserved.
+                </div>
+<div class="flex gap-8">
+<a class="text-slate-500 text-sm hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="text-slate-500 text-sm hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="text-slate-500 text-sm hover:text-white transition-colors" href="#">Cookie Settings</a>
+</div>
+<div class="flex gap-4">
+<a class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-lg">public</span>
+</a>
+<a class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-lg">share</span>
+</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

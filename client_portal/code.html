@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RD Collection - Premium Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9d25f4",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#0a0612",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(157, 37, 244, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(157, 37, 244, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .sidebar-item-active {
+            background: linear-gradient(90deg, rgba(157, 37, 244, 0.2) 0%, rgba(157, 37, 244, 0) 100%);
+            border-left: 3px solid #9d25f4;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Header Section -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-primary/10 px-6 md:px-10 py-4 bg-background-dark/50 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="size-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-2xl">account_balance_wallet</span>
+</div>
+<div>
+<h2 class="text-slate-100 text-lg font-bold leading-tight tracking-tight">RD Premium</h2>
+<p class="text-primary text-[10px] uppercase tracking-widest font-bold">Client Portal</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20">
+<div class="size-2 bg-green-500 rounded-full animate-pulse"></div>
+<span class="text-xs font-medium text-primary">System Online</span>
+</div>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-full border-2 border-primary overflow-hidden shadow-lg shadow-primary/20">
+<img class="w-full h-full object-cover" data-alt="Portrait of a male premium member" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcJ5Un8_bFtlRXyV3TDCCleOJTCrZT5HbSPCrIwQosGiKJDNIU5wdu-x4Ueunv1C6E0p7zj_rKLNHLjkP52ifzekNziUiVdDllf5ERa35bDIlcc0f5EyHvI5mZtVq9_TwYolWDkTy-3mlCBGsMYApTDTMR0nQzljIgEY_YT9OihLLMU6YjxEEJiMuQwoT7o5IPEzVxvMhM9DooMVQX4vdFl2MKKCzyQ6akyRC6deHVdQxVgIo2mVn7NvXRtdr_mtK7CTyz5JN5_ecd"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="hidden lg:flex flex-col w-64 border-r border-primary/10 bg-background-dark p-6 gap-8">
+<div class="flex flex-col gap-2">
+<p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-2">Main Menu</p>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg sidebar-item-active text-primary" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-semibold">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-sm font-semibold">Passbook</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-sm font-semibold">Deposits</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">hourglass_top</span>
+<span class="text-sm font-semibold">Maturity Tracker</span>
+</a>
+</div>
+<div class="flex flex-col gap-2">
+<p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-2">Account</p>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-sm font-semibold">Profile Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-semibold">Security Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:bg-red-400/10 transition-colors mt-auto" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-semibold">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-[#0a0612]">
+<div class="max-w-6xl mx-auto p-6 md:p-10 space-y-10">
+<!-- Profile Hero Section -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20">
+<div class="flex items-center gap-6">
+<div class="relative">
+<div class="size-24 rounded-2xl overflow-hidden border-2 border-primary ring-4 ring-primary/10 shadow-2xl">
+<img class="w-full h-full object-cover" data-alt="Profile photo of Alex Henderson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtIiLb2Rua4lfVFUxGfnlKFrg4vuHdKLlUpHdx4mi-ngS3MMkY5KYuYjsEORFEz2pICpito2x2TKZbf6KfMHgbpU9nIjAgR5Kp5dFxweXyUlsFIoQZWOopkNmSvkz0hw-ticOTcgCAD9M9P_KUUNC8VUTkQ7GetwGgFT8zV9QJ1VOwu4zLWejuzJn9V3HR6EfrDDkJkUA5LYXuI1uswyta9P2x34VmrygwSJhTYOTFsIcRa1sWc7431EazpJWj7t73cQ4qeQSp0hA2"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-primary text-white p-1.5 rounded-lg shadow-lg">
+<span class="material-symbols-outlined text-sm">verified</span>
+</div>
+</div>
+<div>
+<h1 class="text-3xl font-bold text-slate-100 tracking-tight">Alex Henderson</h1>
+<p class="text-slate-400 font-medium">RD Premium Client • <span class="text-primary">Member since Oct 2021</span></p>
+<div class="flex gap-2 mt-3">
+<span class="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase">Platinum Tier</span>
+<span class="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] font-bold text-green-500 uppercase">Active Account</span>
+</div>
+</div>
+</div>
+<button class="px-6 py-3 rounded-xl bg-primary text-white font-bold text-sm flex items-center gap-2 hover:bg-primary/80 transition-all shadow-lg shadow-primary/25">
+<span class="material-symbols-outlined text-lg">edit</span>
+                                Edit Profile
+                            </button>
+</div>
+<!-- Stats Cards (Glassmorphic 3D) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 size-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all"></div>
+<div class="flex flex-col gap-4">
+<div class="size-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div>
+<p class="text-slate-400 text-sm font-medium">Current Balance</p>
+<p class="text-3xl font-bold text-white mt-1">$12,450.00</p>
+</div>
+<div class="flex items-center gap-2 text-green-400 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                        +2.4% this month
+                                    </div>
+</div>
+</div>
+<div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 size-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all"></div>
+<div class="flex flex-col gap-4">
+<div class="size-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">event_upcoming</span>
+</div>
+<div>
+<p class="text-slate-400 text-sm font-medium">Days until Maturity</p>
+<p class="text-3xl font-bold text-white mt-1">142 Days</p>
+</div>
+<div class="w-full bg-primary/10 h-2 rounded-full overflow-hidden mt-1">
+<div class="bg-primary h-full w-[65%] rounded-full shadow-[0_0_10px_rgba(157,37,244,0.5)]"></div>
+</div>
+</div>
+</div>
+<div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 size-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all"></div>
+<div class="flex flex-col gap-4">
+<div class="size-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">redeem</span>
+</div>
+<div>
+<p class="text-slate-400 text-sm font-medium">Interest Earned</p>
+<p class="text-3xl font-bold text-white mt-1">+$840.25</p>
+</div>
+<div class="flex items-center gap-2 text-slate-400 text-xs font-medium">
+                                        Next payout: Dec 12, 2024
+                                    </div>
+</div>
+</div>
+</div>
+<!-- Main Sections Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+<!-- Transactions / Passbook -->
+<div class="bg-primary/5 rounded-3xl border border-primary/10 overflow-hidden">
+<div class="p-6 border-b border-primary/10 flex items-center justify-between bg-primary/5">
+<h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+                                        Recent Transactions
+                                    </h2>
+<button class="text-primary text-xs font-bold hover:underline">View All</button>
+</div>
+<div class="p-2">
+<table class="w-full text-left">
+<tbody>
+<tr class="group hover:bg-primary/10 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500">
+<span class="material-symbols-outlined">add</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-100">Monthly Deposit</p>
+<p class="text-xs text-slate-500">Nov 15, 2024 • 10:24 AM</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-right">
+<p class="text-sm font-bold text-green-500">+$500.00</p>
+<p class="text-[10px] text-slate-500 uppercase font-bold">Success</p>
+</td>
+</tr>
+<tr class="group hover:bg-primary/10 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-100">Interest Credited</p>
+<p class="text-xs text-slate-500">Oct 30, 2024 • 12:00 AM</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-right">
+<p class="text-sm font-bold text-primary">+$42.15</p>
+<p class="text-[10px] text-slate-500 uppercase font-bold">Credited</p>
+</td>
+</tr>
+<tr class="group hover:bg-primary/10 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500">
+<span class="material-symbols-outlined">add</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-100">Monthly Deposit</p>
+<p class="text-xs text-slate-500">Oct 15, 2024 • 09:15 AM</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-right">
+<p class="text-sm font-bold text-green-500">+$500.00</p>
+<p class="text-[10px] text-slate-500 uppercase font-bold">Success</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Deposit Gateway Section -->
+<div class="bg-primary/5 rounded-3xl border border-primary/10 p-8 space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+                                        Add Funds
+                                    </h2>
+<span class="material-symbols-outlined text-slate-500">lock</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-2">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Amount to Deposit</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">$</span>
+<input class="w-full bg-background-dark/50 border border-primary/20 rounded-xl px-10 py-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-xl font-bold text-white" placeholder="0.00" type="number"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-background-dark border border-primary/40 p-4 rounded-xl flex items-center justify-between cursor-pointer ring-2 ring-primary">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">credit_card</span>
+<span class="text-sm font-bold">Card • 4242</span>
+</div>
+<div class="size-4 rounded-full border-4 border-primary bg-primary"></div>
+</div>
+<div class="bg-background-dark/30 border border-primary/10 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:border-primary/40 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">account_balance</span>
+<span class="text-sm font-bold text-slate-400">Net Banking</span>
+</div>
+</div>
+</div>
+<button class="w-full py-4 rounded-xl bg-primary text-white font-bold text-lg shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                                        Confirm Deposit
+                                    </button>
+<p class="text-center text-[10px] text-slate-500 italic">Encrypted by RD Secure Gateway. No hidden processing fees.</p>
+</div>
+</div>
+</div>
+<!-- Maturity Withdrawal Tracker -->
+<div class="bg-gradient-to-r from-background-dark to-primary/10 rounded-3xl border border-primary/10 p-8">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+<div class="space-y-4 flex-1">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+<span class="material-symbols-outlined text-sm text-primary">timer</span>
+<span class="text-[10px] font-bold text-primary uppercase">Maturity Progress</span>
+</div>
+<h2 class="text-2xl font-bold text-slate-100 tracking-tight">Investment Maturity Tracker</h2>
+<p class="text-slate-400 text-sm max-w-md">Your Recurring Deposit is currently in the growth phase. Once you hit 100%, you can withdraw your full balance plus earned interest without penalties.</p>
+<div class="space-y-2 mt-6">
+<div class="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
+<span>Progress</span>
+<span>65% Complete</span>
+</div>
+<div class="w-full bg-primary/10 h-4 rounded-full border border-primary/5 p-1">
+<div class="bg-primary h-full w-[65%] rounded-full relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 size-4 bg-white rounded-full border-4 border-primary shadow-lg shadow-primary/50"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-background-dark/50 border border-primary/20 p-6 rounded-2xl md:w-80 flex flex-col gap-4 text-center">
+<p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Withdrawal Estimated Date</p>
+<p class="text-3xl font-bold text-white">April 24, 2025</p>
+<div class="h-[1px] bg-primary/10"></div>
+<div class="flex flex-col gap-1">
+<p class="text-xs text-slate-400">Locked Amount</p>
+<p class="text-xl font-bold text-primary">$13,290.25</p>
+</div>
+<button class="w-full py-3 rounded-xl bg-slate-800 text-slate-500 font-bold text-sm cursor-not-allowed border border-slate-700">
+                                        Withdrawal Locked
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="p-10 border-t border-primary/10 text-center space-y-4">
+<div class="flex justify-center gap-6 text-slate-500">
+<a class="hover:text-primary transition-colors font-medium text-sm" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors font-medium text-sm" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors font-medium text-sm" href="#">Help Center</a>
+</div>
+<p class="text-slate-600 text-xs">© 2024 RD Collection System Premium Portal. All rights reserved. Member FDIC Insured.</p>
+</footer>
+</main>
+</div>
+</div>
+</div>
+</body></html>
