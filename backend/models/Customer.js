@@ -8,6 +8,7 @@ const customerSchema = new mongoose.Schema({
   profilePictureUrl: { type: String },
   adharCard: { type: String },
   panCard: { type: String },
+  drivingLicence: { type: String },
   kycStatus: { type: String, default: 'pending', enum: ['pending', 'verified', 'rejected'] },
   rdAccounts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'RDAccount' }],
 }, { timestamps: true });

@@ -5,6 +5,7 @@ const { authMiddleware, customerMiddleware } = require('../middleware/auth');
 const Customer = require('../models/Customer');
 const RDAccount = require('../models/RDAccount');
 const CollectionEntry = require('../models/CollectionEntry');
+const upload = require('../middleware/upload');
 
 // Middleware to get Customer ID from User ID
 const getCustomerId = async (req, res, next) => {
@@ -109,6 +110,50 @@ router.put('/profile', async (req, res) => {
             { new: true }
         );
         res.json({ message: 'Profile updated successfully', customer });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// @route   POST /api/customer/profile-photo
+// @desc    Upload profile photo
+router.post('/profile-photo', upload.single('profilePhoto'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: 'Please upload a file' });
+        
+        const imageUrl = `/uploads/${req.file.filename}`;
+        const customer = await Customer.findByIdAndUpdate(
+            req.customerId,
+            { profilePictureUrl: imageUrl },
+            { new: true }
+        );
+        
+        res.json({ message: 'Profile photo uploaded successfully', imageUrl, customer });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// @route   POST /api/customer/kyc-upload
+// @desc    Upload KYC documents (adharCard, panCard, drivingLicence)
+router.post('/kyc-upload', upload.single('document'), async (req, res) => {
+    try {
+        const { docType } = req.body; // 'adharCard', 'panCard', 'drivingLicence'
+        if (!req.file) return res.status(400).json({ error: 'Please upload a file' });
+        if (!['adharCard', 'panCard', 'drivingLicence'].includes(docType)) {
+            return res.status(400).json({ error: 'Invalid document type' });
+        }
+
+        const fileUrl = `/uploads/${req.file.filename}`;
+        const update = { [docType]: fileUrl, kycStatus: 'pending' };
+        
+        const customer = await Customer.findByIdAndUpdate(
+            req.customerId,
+            update,
+            { new: true }
+        );
+
+        res.json({ message: `${docType} uploaded successfully`, fileUrl, customer });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
-import { User, Shield, MapPin, Phone, Mail, Calendar } from 'lucide-react';
+import { User, Shield, MapPin, Phone, Mail, Calendar, Camera, Upload, CheckCircle, XCircle } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const Profile = () => {
     const { user } = useAuth();
@@ -11,13 +12,15 @@ const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ phone: '', address: '' });
     const [passwords, setPasswords] = useState({ oldPassword: '', newPassword: '' });
+    const [uploading, setUploading] = useState({ photo: false, aadhar: false, pan: false, dl: false });
 
     useEffect(() => {
 
         const fetchProfile = async () => {
             try {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/accounts`);
-                const data = res.data[0]; // For demo, use first account's customer data
+                const config = { headers: { Authorization: `Bearer ${localStorage.getItem('rdToken')}` } };
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/accounts`, config);
+                const data = res.data[0]; 
                 if (data) {
                     setProfile(data.customerId);
                     setFormData({
@@ -66,6 +69,53 @@ const Profile = () => {
         }
     };
 
+    const handlePhotoUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploading(prev => ({ ...prev, photo: true }));
+        const formDataUpload = new FormData();
+        formDataUpload.append('profilePhoto', file);
+
+        try {
+            const config = { headers: { 
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${localStorage.getItem('rdToken')}`
+            } };
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/profile-photo`, formDataUpload, config);
+            setProfile({ ...profile, profilePictureUrl: res.data.imageUrl });
+            toast.success('Profile photo updated!');
+        } catch (err) {
+            toast.error(err.response?.data?.error || 'Upload failed');
+        } finally {
+            setUploading(prev => ({ ...prev, photo: false }));
+        }
+    };
+
+    const handleKycUpload = async (e, docType) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploading(prev => ({ ...prev, [docType === 'adharCard' ? 'aadhar' : docType === 'panCard' ? 'pan' : 'dl']: true }));
+        const formDataUpload = new FormData();
+        formDataUpload.append('document', file);
+        formDataUpload.append('docType', docType);
+
+        try {
+            const config = { headers: { 
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${localStorage.getItem('rdToken')}`
+            } };
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/kyc-upload`, formDataUpload, config);
+            setProfile(res.data.customer);
+            toast.success(`${docType.replace('Card', '')} uploaded! Status set to pending.`);
+        } catch (err) {
+            toast.error(err.response?.data?.error || 'Upload failed');
+        } finally {
+            setUploading(prev => ({ ...prev, [docType === 'adharCard' ? 'aadhar' : docType === 'panCard' ? 'pan' : 'dl']: false }));
+        }
+    };
+
     if (loading) return <div className="text-center py-5"><span className="spinner-border text-primary"></span></div>;
 
 
@@ -77,10 +127,26 @@ const Profile = () => {
                 <div className="col-lg-4">
                     <div className="card shadow-sm border-0 text-center p-4 rounded-4">
                         <div className="position-relative d-inline-block mx-auto mb-3">
-                            <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style={{width: 100, height: 100, fontSize: '2.5rem'}}>
-                                {profile?.userId?.name?.charAt(0)}
+                            <div className="rounded-circle overflow-hidden d-flex align-items-center justify-content-center bg-light border border-primary border-2" style={{width: 120, height: 120}}>
+                                {profile?.profilePictureUrl ? (
+                                    <img 
+                                        src={`${import.meta.env.VITE_API_URL}${profile.profilePictureUrl}`} 
+                                        alt="Profile" 
+                                        className="w-100 h-100 object-fit-cover"
+                                    />
+                                ) : (
+                                    <span className="text-primary fw-bold" style={{fontSize: '3rem'}}>{profile?.userId?.name?.charAt(0)}</span>
+                                )}
+                                {uploading.photo && (
+                                    <div className="position-absolute translate-middle top-50 start-50">
+                                        <div className="spinner-border spinner-border-sm text-primary"></div>
+                                    </div>
+                                )}
                             </div>
-                            <div className="position-absolute bottom-0 end-0 bg-success border border-white border-4 rounded-circle" style={{width: 25, height: 25}}></div>
+                            <label className="position-absolute bottom-0 end-0 bg-primary text-white p-2 rounded-circle cursor-pointer shadow-sm hover-scale mb-0" style={{width: 38, height: 38}}>
+                                <Camera size={18} />
+                                <input type="file" className="d-none" onChange={handlePhotoUpload} accept="image/*" />
+                            </label>
                         </div>
                         <h4 className="fw-bold mb-1">{profile?.userId?.name}</h4>
                         <p className="text-muted small mb-3">Customer ID: {profile?._id?.substring(0, 8).toUpperCase()}</p>
@@ -233,21 +299,39 @@ const Profile = () => {
                         </div>
                     </div>
 
-                    {/* KYC Document Section */}
-                    <div className="card shadow-sm border-0 rounded-4 overflow-hidden">
+                    <div className="card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
                         <div className="card-header bg-white border-0 p-4 pb-0">
-                            <h5 className="fw-bold mb-0">KYC Documents</h5>
+                            <h5 className="fw-bold mb-0">Documents & KYC Verification</h5>
                         </div>
-                        <div className="card-body p-4">
-                            <div className="d-flex align-items-center justify-content-between p-3 border rounded-3 border-dashed">
-                                <div className="d-flex align-items-center gap-3">
-                                    <div className="bg-light p-2 rounded"><MapPin className="text-muted" size={24} /></div>
-                                    <div>
-                                        <span className="d-block fw-bold">ID Proof / Address Proof</span>
-                                        <small className="text-muted">Status: {profile?.kycStatus?.toUpperCase() || 'NOT UPLOADED'}</small>
+                        <div className="card-body p-4 pt-2">
+                            <div className="row g-3">
+                                {[
+                                    { id: 'adharCard', label: 'Aadhaar Card', value: profile?.adharCard, key: 'aadhar' },
+                                    { id: 'panCard', label: 'PAN Card', value: profile?.panCard, key: 'pan' },
+                                    { id: 'drivingLicence', label: 'Driving Licence', value: profile?.drivingLicence, key: 'dl' }
+                                ].map((doc) => (
+                                    <div key={doc.id} className="col-12">
+                                        <div className="d-flex align-items-center justify-content-between p-3 bg-light rounded-3 border">
+                                            <div className="d-flex align-items-center gap-3">
+                                                <div className="bg-white p-2 rounded shadow-sm">
+                                                    {doc.value ? <CheckCircle className="text-success" size={20} /> : <Shield className="text-muted" size={20} />}
+                                                </div>
+                                                <div>
+                                                    <span className="d-block fw-bold small">{doc.label}</span>
+                                                    {doc.value ? (
+                                                        <a href={`${import.meta.env.VITE_API_URL}${doc.value}`} target="_blank" rel="noreferrer" className="text-primary small text-decoration-none hover-underline">View Document</a>
+                                                    ) : (
+                                                        <small className="text-secondary">Not uploaded yet</small>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <label className="btn btn-sm btn-white border shadow-sm rounded-pill px-3 mb-0 transition-all hover-bg-primary hover-text-white cursor-pointer d-flex align-items-center gap-2">
+                                               {uploading[doc.key] ? <span className="spinner-border spinner-border-sm"></span> : <><Upload size={14} /> Upload</>}
+                                               <input type="file" className="d-none" onChange={(e) => handleKycUpload(e, doc.id)} accept="image/*,application/pdf" />
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
-                                <button className="btn btn-primary btn-sm rounded-pill px-3">Upload New</button>
+                                ))}
                             </div>
                         </div>
                     </div>

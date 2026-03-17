@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { UserPlus, Search, Trash2, Edit, CheckCircle, XCircle } from 'lucide-react';
+import { UserPlus, Search, Trash2, Edit, CheckCircle, XCircle, FileText, Eye, ShieldCheck, ShieldAlert } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { toast } from 'react-hot-toast';
 
@@ -25,6 +25,10 @@ const ManageCustomers = () => {
     const [accountData, setAccountData] = useState({
         planId: '', agentId: '', installmentAmount: '', startDate: new Date().toISOString().split('T')[0]
     });
+
+    // KYC Review State
+    const [showKycModal, setShowKycModal] = useState(false);
+    const [selectedKycCustomer, setSelectedKycCustomer] = useState(null);
 
     const fetchInitialData = async () => {
         try {
@@ -289,19 +293,24 @@ const ManageCustomers = () => {
                                                 <div className="small text-muted">{customer.address}</div>
                                             </td>
                                             <td>
-                                                <div className="dropdown d-inline-block">
-                                                    <span className={`badge px-2 py-1 border dropdown-toggle cursor-pointer ${
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <span className={`badge px-2 py-1 border ${
                                                         customer.kycStatus === 'verified' ? 'bg-success-subtle text-success border-success-subtle' : 
                                                         customer.kycStatus === 'rejected' ? 'bg-danger-subtle text-danger border-danger-subtle' : 
                                                         'bg-warning-subtle text-warning border-warning-subtle'
-                                                    }`} data-bs-toggle="dropdown">
+                                                    }`}>
                                                         {customer.kycStatus?.charAt(0).toUpperCase() + customer.kycStatus?.slice(1)}
                                                     </span>
-                                                    <ul className="dropdown-menu shadow border-0">
-                                                        <li><button className="dropdown-item small" onClick={() => handleVerifyKYC(customer._id, 'verified')}>Approve KYC</button></li>
-                                                        <li><button className="dropdown-item small" onClick={() => handleVerifyKYC(customer._id, 'pending')}>Mark Pending</button></li>
-                                                        <li><button className="dropdown-item small text-danger" onClick={() => handleVerifyKYC(customer._id, 'rejected')}>Reject KYC</button></li>
-                                                    </ul>
+                                                    <button 
+                                                        className="btn btn-sm btn-light p-1 rounded-circle" 
+                                                        onClick={() => {
+                                                            setSelectedKycCustomer(customer);
+                                                            setShowKycModal(true);
+                                                        }}
+                                                        title="Review Documents"
+                                                    >
+                                                        <Eye size={14} className="text-primary" />
+                                                    </button>
                                                 </div>
 
                                             </td>
@@ -349,6 +358,88 @@ const ManageCustomers = () => {
                     </div>
                 </div>
             </div>
+
+            {/* KYC Verification Modal */}
+            {showKycModal && selectedKycCustomer && (
+                <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                    <div className="modal-dialog modal-lg modal-dialog-centered">
+                        <div className="modal-content border-0 shadow-lg rounded-4">
+                            <div className="modal-header border-bottom-0 p-4">
+                                <h5 className="modal-title fw-bold">KYC Document Review</h5>
+                                <button type="button" className="btn-close" onClick={() => setShowKycModal(false)}></button>
+                            </div>
+                            <div className="modal-body p-4 pt-0">
+                                <div className="p-3 bg-light rounded-3 mb-4 d-flex align-items-center gap-3">
+                                    <div className="bg-primary bg-opacity-10 text-primary p-2 rounded-circle fw-bold">
+                                        {selectedKycCustomer.userId.name.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <div className="fw-bold">{selectedKycCustomer.userId.name}</div>
+                                        <div className="small text-muted">Customer ID: {selectedKycCustomer._id}</div>
+                                    </div>
+                                </div>
+
+                                <div className="row g-4">
+                                    {[
+                                        { id: 'adharCard', label: 'Aadhaar Card', value: selectedKycCustomer.adharCard },
+                                        { id: 'panCard', label: 'PAN Card', value: selectedKycCustomer.panCard },
+                                        { id: 'drivingLicence', label: 'Driving Licence', value: selectedKycCustomer.drivingLicence }
+                                    ].map((doc) => (
+                                        <div key={doc.id} className="col-md-4">
+                                            <div className="card h-100 border-0 shadow-sm bg-light text-center p-3 rounded-4">
+                                                <div className="mb-2">
+                                                    <FileText size={32} className={doc.value ? 'text-primary' : 'text-muted opacity-50'} />
+                                                </div>
+                                                <div className="fw-bold small mb-2">{doc.label}</div>
+                                                {doc.value ? (
+                                                    <div className="d-grid gap-2">
+                                                        <a 
+                                                            href={`${import.meta.env.VITE_API_URL}${doc.value}`} 
+                                                            target="_blank" 
+                                                            rel="noreferrer" 
+                                                            className="btn btn-sm btn-outline-primary rounded-pill py-1"
+                                                        >
+                                                            View Full
+                                                        </a>
+                                                        {doc.value.match(/\.(jpg|jpeg|png)$/i) && (
+                                                            <div className="mt-2 rounded-3 overflow-hidden border" style={{ height: '80px' }}>
+                                                                <img src={`${import.meta.env.VITE_API_URL}${doc.value}`} alt="Preview" className="w-100 h-100 object-fit-cover" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <span className="badge bg-secondary-subtle text-secondary rounded-pill">Not Uploaded</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="modal-footer border-top-0 p-4 gap-2">
+                                <button 
+                                    className="btn btn-danger-custom rounded-pill px-4 d-flex align-items-center gap-2"
+                                    onClick={() => {
+                                        handleVerifyKYC(selectedKycCustomer._id, 'rejected');
+                                        setShowKycModal(false);
+                                    }}
+                                >
+                                    <ShieldAlert size={18} /> Reject KYC
+                                </button>
+                                <button 
+                                    className="btn btn-success rounded-pill px-4 d-flex align-items-center gap-2"
+                                    onClick={() => {
+                                        handleVerifyKYC(selectedKycCustomer._id, 'verified');
+                                        setShowKycModal(false);
+                                    }}
+                                >
+                                    <ShieldCheck size={18} /> Approve KYC
+                                </button>
+                                <button className="btn btn-light rounded-pill px-4" onClick={() => setShowKycModal(false)}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
