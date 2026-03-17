@@ -394,5 +394,22 @@ router.get('/accounts/:id/history', async (req, res) => {
 });
 
 
+// Update Agent for an RD Account
+router.put('/accounts/:id/agent', async (req, res) => {
+    try {
+        const { agentId } = req.body;
+        const account = await RDAccount.findByIdAndUpdate(
+            req.params.id, 
+            { agentId },
+            { new: true }
+        ).populate({ path: 'agentId', populate: { path: 'userId', select: 'name' } });
+        
+        if (!account) return res.status(404).json({ error: 'Account not found' });
+        res.json({ message: 'Agent reassigned successfully', account });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;
 

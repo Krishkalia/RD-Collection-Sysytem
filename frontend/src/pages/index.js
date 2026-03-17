@@ -7,7 +7,6 @@ import DailyReports from './admin/DailyReports';
 import Settings from './admin/Settings';
 import PlanSubscribers from './admin/PlanSubscribers';
 import ManageAccounts from './admin/ManageAccounts';
-import ManageAllocations from './admin/ManageAllocations';
 import CommissionPayouts from './admin/CommissionPayouts';
 
 
@@ -42,7 +41,6 @@ export {
   Profile,
   PlanSubscribers,
   ManageAccounts,
-  ManageAllocations,
   CommissionPayouts
 };
 

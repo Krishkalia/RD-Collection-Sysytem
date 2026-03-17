@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, Filter, CreditCard, User, Calendar, CheckCircle, XCircle, Download } from 'lucide-react';
+import { Search, Filter, CreditCard, User, Calendar, CheckCircle, XCircle, Download, UserCheck, RefreshCw } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 const ManageAccounts = () => {
@@ -8,9 +8,24 @@ const ManageAccounts = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const [agents, setAgents] = useState([]);
+  const [showAgentModal, setShowAgentModal] = useState(false);
+  const [newAgentId, setNewAgentId] = useState('');
+
   useEffect(() => {
     fetchAccounts();
+    fetchAgents();
   }, []);
+
+  const fetchAgents = async () => {
+    try {
+      const config = { headers: { Authorization: `Bearer ${localStorage.getItem('rdToken')}` } };
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/agents`, config);
+      setAgents(res.data);
+    } catch (err) {
+      console.error('Failed to fetch agents', err);
+    }
+  };
 
   const fetchAccounts = async () => {
     try {
@@ -72,6 +87,20 @@ const ManageAccounts = () => {
     link.click();
   };
 
+  const handleUpdateAgent = async (e) => {
+    e.preventDefault();
+    if (!newAgentId) return toast.error('Please select an agent');
+    try {
+      const config = { headers: { Authorization: `Bearer ${localStorage.getItem('rdToken')}` } };
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/admin/accounts/${selectedAccount._id}/agent`, { agentId: newAgentId }, config);
+      toast.success('Agent reassigned successfully');
+      setShowAgentModal(false);
+      fetchAccounts();
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to reassign agent');
+    }
+  };
+
   return (
     <div className="fade-in">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -102,6 +131,7 @@ const ManageAccounts = () => {
                 <th className="ps-4">Account Number</th>
                 <th>Customer</th>
                 <th>Plan Name</th>
+                <th>Assigned Agent</th>
                 <th>Deposited / Maturity</th>
                 <th>Status</th>
                 <th className="text-end pe-4">Actions</th>
@@ -122,6 +152,17 @@ const ManageAccounts = () => {
                     </td>
                     <td>{acc.planId?.name}</td>
                     <td>
+                        <div className="d-flex align-items-center gap-2">
+                             <span className="small fw-medium">{acc.agentId?.userId?.name || 'Unassigned'}</span>
+                             <button 
+                                onClick={() => { setSelectedAccount(acc); setNewAgentId(acc.agentId?._id || ''); setShowAgentModal(true); }}
+                                className="btn btn-link p-0 text-muted" title="Change Agent"
+                             >
+                                <RefreshCw size={12} />
+                             </button>
+                        </div>
+                    </td>
+                    <td>
                         <div className="fw-bold">₹{acc.totalDeposited.toLocaleString()} / <span className="text-success">₹{acc.maturityAmount.toLocaleString()}</span></div>
                         <div className="progress mt-1" style={{height: '4px'}}>
                             <div className="progress-bar bg-primary" style={{width: `${Math.min(100, (acc.totalDeposited/acc.maturityAmount)*100)}%`}}></div>
@@ -133,12 +174,12 @@ const ManageAccounts = () => {
                       </span>
                     </td>
                     <td className="text-end pe-4">
-                      <button onClick={() => viewPassbook(acc)} className="btn btn-sm btn-outline-primary border-0 rounded-pill">View Passbook</button>
+                      <button onClick={() => viewPassbook(acc)} className="btn btn-sm btn-outline-primary border-0 rounded-pill me-2">Passbook</button>
                     </td>
                   </tr>
                 ))
               ) : (
-                <tr><td colSpan="6" className="text-center py-5 text-muted">No accounts found matching your search.</td></tr>
+                <tr><td colSpan="7" className="text-center py-5 text-muted">No accounts found matching your search.</td></tr>
               )}
 
             </tbody>
@@ -193,6 +234,43 @@ const ManageAccounts = () => {
                     </table>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Change Agent Modal */}
+      {showAgentModal && (
+        <div className="modal fade show d-block" style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content border-0 rounded-4 shadow-lg">
+              <div className="modal-header border-0 p-4 pb-0">
+                <h5 className="fw-bold">Reassign Agent</h5>
+                <button type="button" className="btn-close" onClick={() => setShowAgentModal(false)}></button>
+              </div>
+              <form onSubmit={handleUpdateAgent}>
+                <div className="modal-body p-4">
+                    <p className="small text-muted mb-3">Reassigning agent for account <b>{selectedAccount?.accountNumber}</b></p>
+                    <div className="mb-3">
+                        <label className="form-label small fw-bold">Select New Agent</label>
+                        <select 
+                            className="form-select bg-light border-0" 
+                            value={newAgentId} 
+                            onChange={(e) => setNewAgentId(e.target.value)}
+                            required
+                        >
+                            <option value="">Choose Agent...</option>
+                            {agents.map(a => (
+                                <option key={a._id} value={a._id}>{a.userId?.name} ({a.status})</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <div className="modal-footer border-0 p-4 pt-0">
+                    <button type="button" className="btn btn-light rounded-pill px-4" onClick={() => setShowAgentModal(false)}>Cancel</button>
+                    <button type="submit" className="btn btn-primary rounded-pill px-4">Update Allocation</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

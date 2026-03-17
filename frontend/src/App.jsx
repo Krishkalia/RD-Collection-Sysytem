@@ -22,7 +22,6 @@ import {
   Profile,
   PlanSubscribers,
   ManageAccounts,
-  ManageAllocations,
   CommissionPayouts
 } from './pages';
 
@@ -54,7 +53,6 @@ const App = () => {
               <Route path="/admin/plans" element={<ManagePlans />} />
               <Route path="/admin/plans/:id/subscribers" element={<PlanSubscribers />} />
               <Route path="/admin/accounts" element={<ManageAccounts />} />
-              <Route path="/admin/allocations" element={<ManageAllocations />} />
               <Route path="/admin/commissions" element={<CommissionPayouts />} />
               <Route path="/admin/settings" element={<Settings />} />
             </Route>

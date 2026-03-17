@@ -18,7 +18,6 @@ const Sidebar = () => {
     { name: 'Manage Agents', path: '/admin/agents', icon: <Briefcase size={20} /> },
     { name: 'All Customers', path: '/admin/customers', icon: <Users size={20} /> },
     { name: 'RD Accounts', path: '/admin/accounts', icon: <CreditCard size={20} /> },
-    { name: 'Agent Allocations', path: '/admin/allocations', icon: <UserCheck size={20} /> },
     { name: 'Commissions', path: '/admin/commissions', icon: <DollarSign size={20} /> },
     { name: 'Daily Reports', path: '/admin/reports', icon: <FileText size={20} /> },
 
