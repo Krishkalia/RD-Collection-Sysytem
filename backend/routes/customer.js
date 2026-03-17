@@ -121,7 +121,7 @@ router.post('/profile-photo', upload.single('profilePhoto'), async (req, res) =>
     try {
         if (!req.file) return res.status(400).json({ error: 'Please upload a file' });
         
-        const imageUrl = `/uploads/${req.file.filename}`;
+        const imageUrl = req.file.path;
         const customer = await Customer.findByIdAndUpdate(
             req.customerId,
             { profilePictureUrl: imageUrl },
@@ -144,7 +144,7 @@ router.post('/kyc-upload', upload.single('document'), async (req, res) => {
             return res.status(400).json({ error: 'Invalid document type' });
         }
 
-        const fileUrl = `/uploads/${req.file.filename}`;
+        const fileUrl = req.file.path;
         const update = { [docType]: fileUrl, kycStatus: 'pending' };
         
         const customer = await Customer.findByIdAndUpdate(

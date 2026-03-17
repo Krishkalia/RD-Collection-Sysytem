@@ -30,6 +30,12 @@ const ManageCustomers = () => {
     const [showKycModal, setShowKycModal] = useState(false);
     const [selectedKycCustomer, setSelectedKycCustomer] = useState(null);
 
+    const getFileUrl = (path) => {
+        if (!path) return null;
+        if (path.startsWith('http')) return path;
+        return `${import.meta.env.VITE_API_URL}${path}`;
+    };
+
     const fetchInitialData = async () => {
         try {
             const config = { headers: { Authorization: `Bearer ${localStorage.getItem('rdToken')}` } };
@@ -394,7 +400,7 @@ const ManageCustomers = () => {
                                                 {doc.value ? (
                                                     <div className="d-grid gap-2">
                                                         <a 
-                                                            href={`${import.meta.env.VITE_API_URL}${doc.value}`} 
+                                                            href={getFileUrl(doc.value)} 
                                                             target="_blank" 
                                                             rel="noreferrer" 
                                                             className="btn btn-sm btn-outline-primary rounded-pill py-1"
@@ -403,7 +409,7 @@ const ManageCustomers = () => {
                                                         </a>
                                                         {doc.value.match(/\.(jpg|jpeg|png)$/i) && (
                                                             <div className="mt-2 rounded-3 overflow-hidden border" style={{ height: '80px' }}>
-                                                                <img src={`${import.meta.env.VITE_API_URL}${doc.value}`} alt="Preview" className="w-100 h-100 object-fit-cover" />
+                                                                <img src={getFileUrl(doc.value)} alt="Preview" className="w-100 h-100 object-fit-cover" />
                                                             </div>
                                                         )}
                                                     </div>

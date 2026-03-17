@@ -14,6 +14,12 @@ const Profile = () => {
     const [passwords, setPasswords] = useState({ oldPassword: '', newPassword: '' });
     const [uploading, setUploading] = useState({ photo: false, aadhar: false, pan: false, dl: false });
 
+    const getFileUrl = (path) => {
+        if (!path) return null;
+        if (path.startsWith('http')) return path;
+        return `${import.meta.env.VITE_API_URL}${path}`;
+    };
+
     useEffect(() => {
 
         const fetchProfile = async () => {
@@ -130,7 +136,7 @@ const Profile = () => {
                             <div className="rounded-circle overflow-hidden d-flex align-items-center justify-content-center bg-light border border-primary border-2" style={{width: 120, height: 120}}>
                                 {profile?.profilePictureUrl ? (
                                     <img 
-                                        src={`${import.meta.env.VITE_API_URL}${profile.profilePictureUrl}`} 
+                                        src={getFileUrl(profile.profilePictureUrl)} 
                                         alt="Profile" 
                                         className="w-100 h-100 object-fit-cover"
                                     />
@@ -319,7 +325,7 @@ const Profile = () => {
                                                 <div>
                                                     <span className="d-block fw-bold small">{doc.label}</span>
                                                     {doc.value ? (
-                                                        <a href={`${import.meta.env.VITE_API_URL}${doc.value}`} target="_blank" rel="noreferrer" className="text-primary small text-decoration-none hover-underline">View Document</a>
+                                                        <a href={getFileUrl(doc.value)} target="_blank" rel="noreferrer" className="text-primary small text-decoration-none hover-underline">View Document</a>
                                                     ) : (
                                                         <small className="text-secondary">Not uploaded yet</small>
                                                     )}
