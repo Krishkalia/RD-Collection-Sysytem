@@ -47,7 +47,9 @@ const PORT = process.env.PORT || 5000;
 
 // Since we might not have a MongoDB URI right away, we'll just log
 if (process.env.MONGO_URI) {
-  mongoose.connect(process.env.MONGO_URI)
+  mongoose.connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 5000
+  })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 } else {
