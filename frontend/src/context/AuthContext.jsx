@@ -9,8 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  console.log('API URL being used:', import.meta.env.VITE_API_URL);
-
   useEffect(() => {
     const initAuth = async () => {
       try {

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Navbar, Container, Dropdown, Badge } from 'react-bootstrap';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { User, LogOut, Bell, CheckCircle } from 'lucide-react';
+import { User, LogOut, Bell, CheckCircle, Menu } from 'lucide-react';
 
-const TopNav = () => {
+const TopNav = ({ onToggleSidebar }) => {
   const { user, logout } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -52,13 +52,24 @@ const TopNav = () => {
 
 
   return (
-    <Navbar bg="white" expand="lg" className="border-bottom sticky-top py-2 px-4 d-flex justify-content-between">
-      <div className="d-flex align-items-center">
-        <h5 className="mb-0 text-dark fw-bold">
+    <Navbar bg="white" expand="lg" className="border-bottom sticky-top py-2 px-3 ps-lg-4 pe-lg-4 d-flex justify-content-between">
+      <div className="d-flex align-items-center gap-2">
+        <button 
+          className="btn btn-light d-lg-none p-2 border-0 shadow-none mobile-toggle"
+          onClick={onToggleSidebar}
+        >
+          <Menu size={22} className="text-secondary" />
+        </button>
+        <h5 className="mb-0 text-dark fw-bold d-none d-sm-block">
           {user?.role === 'admin' && 'Admin Portal'}
           {user?.role === 'agent' && 'Agent Console'}
           {user?.role === 'user' && 'Customer Area'}
         </h5>
+        <h6 className="mb-0 text-dark fw-bold d-sm-none">
+          {user?.role === 'admin' && 'Admin'}
+          {user?.role === 'agent' && 'Agent'}
+          {user?.role === 'user' && 'Portal'}
+        </h6>
       </div>
       
       <div className="d-flex align-items-center gap-3">

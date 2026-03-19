@@ -37,6 +37,7 @@ body {
 .gradient-text {
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -62,22 +63,60 @@ body {
 }
 
 .sidebar {
-  width: 250px;
+  width: 260px;
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
   flex-shrink: 0;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: sticky;
   top: 0;
   height: 100vh;
   overflow-y: auto;
+  z-index: 1040;
+}
+
+/* Mobile Sidebar Styles */
+@media (max-width: 991.98px) {
+  .sidebar {
+    position: fixed;
+    left: -260px;
+    height: 100vh;
+  }
+  
+  .sidebar.show {
+    left: 0;
+    box-shadow: 10px 0 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 1030;
+    display: none;
+  }
+
+  .sidebar-overlay.show {
+    display: block;
+  }
 }
 
 .main-content {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Important for flex child */
+  min-width: 0;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 992px) {
+  .mobile-toggle {
+    display: none;
+  }
 }
 
 /* Page transitions / micro animations */
@@ -116,4 +155,23 @@ body {
 .stat-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Mobile Overrides */
+@media (max-width: 575.98px) {
+  .auth-card {
+    padding: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .stat-card {
+    padding: 1rem;
+  }
+  
+  .p-3.p-md-4 {
+    padding: 1rem !important;
+  }
 }

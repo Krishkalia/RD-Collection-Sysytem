@@ -5,11 +5,11 @@ import {
   LayoutDashboard, Users, UserPlus, 
   FileText, Briefcase, Settings, 
   CreditCard, Wallet, AreaChart,
-  UserCheck, DollarSign
+  UserCheck, DollarSign, X
 } from 'lucide-react';
 
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onToggleSidebar }) => {
   const { user } = useAuth();
   const role = user?.role;
 
@@ -45,12 +45,20 @@ const Sidebar = () => {
   else if (role === 'user') links = userLinks;
 
   return (
-    <div className="sidebar p-3 d-flex flex-column">
-      <div className="d-flex align-items-center gap-2 mb-4 px-2 py-3 border-bottom border-secondary border-opacity-25">
-        <div className="bg-primary rounded p-2 d-flex align-items-center justify-content-center" style={{width: 38, height: 38}}>
-          <span className="text-white fw-bold fs-5">R</span>
+    <div className={`sidebar p-3 d-flex flex-column ${isOpen ? 'show' : ''}`}>
+      <div className="d-flex align-items-center justify-content-between gap-2 mb-4 px-2 py-3 border-bottom border-secondary border-opacity-25">
+        <div className="d-flex align-items-center gap-2">
+          <div className="bg-primary rounded p-2 d-flex align-items-center justify-content-center" style={{width: 38, height: 38}}>
+            <span className="text-white fw-bold fs-5">R</span>
+          </div>
+          <span className="fs-5 fw-bold gradient-text m-0">RD System</span>
         </div>
-        <span className="fs-5 fw-bold gradient-text m-0">RD System</span>
+        <button 
+          className="btn btn-link text-white d-lg-none p-0 border-0 shadow-none"
+          onClick={onToggleSidebar}
+        >
+          <X size={24} />
+        </button>
       </div>
 
       <div className="flex-grow-1">
