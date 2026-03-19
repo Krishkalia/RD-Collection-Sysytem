@@ -9,6 +9,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  console.log('API URL being used:', import.meta.env.VITE_API_URL);
+
   useEffect(() => {
     const initAuth = async () => {
       try {
@@ -49,7 +51,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // NOTE: Using localhost:5000 hardcode for dev. Adjust in prod.
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { email, password });
 
       
