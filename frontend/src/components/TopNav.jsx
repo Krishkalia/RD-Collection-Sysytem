@@ -9,6 +9,12 @@ const TopNav = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
+  const getFileUrl = (path) => {
+    if (!path) return null;
+    if (path.startsWith('http')) return path;
+    return `${import.meta.env.VITE_API_URL}${path}`;
+  };
+
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -105,8 +111,16 @@ const TopNav = () => {
 
         <Dropdown align="end">
           <Dropdown.Toggle variant="light" className="d-flex align-items-center border-0 gap-2 bg-transparent shadow-none" id="dropdown-basic">
-            <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '35px', height: '35px' }}>
-              <User size={18} />
+            <div className="rounded-circle overflow-hidden d-flex align-items-center justify-content-center bg-primary text-white border border-primary border-1" style={{ width: '35px', height: '35px' }}>
+              {user?.profilePictureUrl ? (
+                <img 
+                  src={getFileUrl(user.profilePictureUrl)} 
+                  alt={user?.name} 
+                  className="w-100 h-100 object-fit-cover"
+                />
+              ) : (
+                <User size={18} />
+              )}
             </div>
             <span className="fw-medium text-dark d-none d-md-block">{user?.name}</span>
           </Dropdown.Toggle>

@@ -285,9 +285,17 @@ const ManageCustomers = () => {
                                         <tr key={customer._id} className={customer.userId?.status === 'inactive' ? 'opacity-50' : ''}>
                                             <td>
                                                 <div className="d-flex align-items-center gap-3">
-                                                    <div className="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{width:40, height:40}}>
-                                                        {customer.userId?.name?.charAt(0) || 'C'}
-                                                    </div>
+                                                     <div className="rounded-circle overflow-hidden d-flex align-items-center justify-content-center bg-info bg-opacity-10 text-info border border-info border-1" style={{width:40, height:40}}>
+                                                         {customer.profilePictureUrl ? (
+                                                             <img 
+                                                                 src={getFileUrl(customer.profilePictureUrl)} 
+                                                                 alt={customer.userId?.name} 
+                                                                 className="w-100 h-100 object-fit-cover"
+                                                             />
+                                                         ) : (
+                                                             <span className="fw-bold">{customer.userId?.name?.charAt(0) || 'C'}</span>
+                                                         )}
+                                                     </div>
                                                     <div>
                                                         <div className="fw-bold text-dark">{customer.userId?.name}</div>
                                                         <div className="small text-muted">{customer.phone}</div>

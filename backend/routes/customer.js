@@ -11,7 +11,9 @@ const upload = require('../middleware/upload');
 const getCustomerId = async (req, res, next) => {
     try {
         const customer = await Customer.findOne({ userId: req.user.userId });
-        if (!customer) return res.status(404).json({ error: 'Customer profile not found' });
+        if (!customer) {
+            return res.status(404).json({ error: 'Customer profile not found' });
+        }
         req.customerId = customer._id;
         next();
     } catch (err) {
@@ -22,6 +24,18 @@ const getCustomerId = async (req, res, next) => {
 router.use(authMiddleware);
 router.use(customerMiddleware);
 router.use(getCustomerId);
+
+// @route   GET /api/customer/me
+// @desc    Get current customer profile
+router.get('/me', async (req, res) => {
+    try {
+        const customer = await Customer.findById(req.customerId).populate('userId', 'name email');
+        if (!customer) return res.status(404).json({ error: 'Customer not found' });
+        res.json(customer);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // @route   GET /api/customer/stats
 // @desc    Get customer dashboard statistics
@@ -121,12 +135,12 @@ router.post('/profile-photo', upload.single('profilePhoto'), async (req, res) =>
     try {
         if (!req.file) return res.status(400).json({ error: 'Please upload a file' });
         
-        const imageUrl = req.file.path;
+        const imageUrl = req.file.path || req.file.secure_url || req.file.url;
         const customer = await Customer.findByIdAndUpdate(
             req.customerId,
             { profilePictureUrl: imageUrl },
             { new: true }
-        );
+        ).populate('userId', 'name email');
         
         res.json({ message: 'Profile photo uploaded successfully', imageUrl, customer });
     } catch (err) {
@@ -144,14 +158,14 @@ router.post('/kyc-upload', upload.single('document'), async (req, res) => {
             return res.status(400).json({ error: 'Invalid document type' });
         }
 
-        const fileUrl = req.file.path;
+        const fileUrl = req.file.path || req.file.secure_url || req.file.url;
         const update = { [docType]: fileUrl, kycStatus: 'pending' };
         
         const customer = await Customer.findByIdAndUpdate(
             req.customerId,
             update,
             { new: true }
-        );
+        ).populate('userId', 'name email');
 
         res.json({ message: `${docType} uploaded successfully`, fileUrl, customer });
     } catch (err) {
@@ -160,4 +174,3 @@ router.post('/kyc-upload', upload.single('document'), async (req, res) => {
 });
 
 module.exports = router;
-

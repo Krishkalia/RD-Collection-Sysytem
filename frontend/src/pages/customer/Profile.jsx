@@ -3,9 +3,10 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { User, Shield, MapPin, Phone, Mail, Calendar, Camera, Upload, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 const Profile = () => {
-    const { user } = useAuth();
+    const { user, updateUser } = useAuth();
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -25,13 +26,13 @@ const Profile = () => {
         const fetchProfile = async () => {
             try {
                 const config = { headers: { Authorization: `Bearer ${localStorage.getItem('rdToken')}` } };
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/accounts`, config);
-                const data = res.data[0]; 
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/me`, config);
+                const data = res.data; 
                 if (data) {
-                    setProfile(data.customerId);
+                    setProfile(data);
                     setFormData({
-                        phone: data.customerId.phone,
-                        address: data.customerId.address
+                        phone: data.phone,
+                        address: data.address
                     });
                 }
             } catch (err) {
@@ -79,6 +80,18 @@ const Profile = () => {
         const file = e.target.files[0];
         if (!file) return;
 
+        const result = await Swal.fire({
+            title: 'Change Profile Photo?',
+            text: "Are you sure you want to upload a new profile photo?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Upload it!'
+        });
+
+        if (!result.isConfirmed) return;
+
         setUploading(prev => ({ ...prev, photo: true }));
         const formDataUpload = new FormData();
         formDataUpload.append('profilePhoto', file);
@@ -90,8 +103,10 @@ const Profile = () => {
             } };
             const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/profile-photo`, formDataUpload, config);
             setProfile({ ...profile, profilePictureUrl: res.data.imageUrl });
+            updateUser({ profilePictureUrl: res.data.imageUrl });
             toast.success('Profile photo updated!');
         } catch (err) {
+            console.error('Photo Upload Error:', err);
             toast.error(err.response?.data?.error || 'Upload failed');
         } finally {
             setUploading(prev => ({ ...prev, photo: false }));

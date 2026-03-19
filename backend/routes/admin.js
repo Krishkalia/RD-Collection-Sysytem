@@ -8,6 +8,7 @@ const Customer = require('../models/Customer');
 const Plan = require('../models/Plan');
 const RDAccount = require('../models/RDAccount');
 const CollectionEntry = require('../models/CollectionEntry');
+const Notification = require('../models/Notification');
 const { authMiddleware, adminMiddleware } = require('../middleware/auth');
 
 // All routes here should be protected by auth and admin middleware
@@ -20,11 +21,27 @@ router.use(adminMiddleware);
 
 router.get('/stats', async (req, res) => {
   try {
+    const now = new Date();
+    const firstDayThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastDayLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+
+    // 1. Total Agents & Growth
     const totalAgents = await Agent.countDocuments({ status: 'active' });
+    const lastMonthAgents = await Agent.countDocuments({ 
+        status: 'active', 
+        createdAt: { $lt: firstDayThisMonth } 
+    });
+    const agentsGrowth = lastMonthAgents === 0 ? 100 : Math.round(((totalAgents - lastMonthAgents) / lastMonthAgents) * 100);
+
+    // 2. Active Customers & Growth
     const totalCustomers = await Customer.countDocuments();
-    const totalPlans = await Plan.countDocuments();
-    
-    // Sum of collections for today
+    const lastMonthCustomers = await Customer.countDocuments({ 
+        createdAt: { $lt: firstDayThisMonth } 
+    });
+    const customersGrowth = lastMonthCustomers === 0 ? 100 : Math.round(((totalCustomers - lastMonthCustomers) / lastMonthCustomers) * 100);
+
+    // 3. Today's Collection & Monthly Growth
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
     const endOfDay = new Date();
@@ -35,7 +52,27 @@ router.get('/stats', async (req, res) => {
       { $group: { _id: null, total: { $sum: "$amount" } } }
     ]);
 
-    // Simple history for chart
+    const thisMonthCollections = await CollectionEntry.aggregate([
+        { $match: { collectionDate: { $gte: firstDayThisMonth } } },
+        { $group: { _id: null, total: { $sum: "$amount" } } }
+    ]);
+    const lastMonthCollections = await CollectionEntry.aggregate([
+        { $match: { collectionDate: { $gte: firstDayLastMonth, $lte: lastDayLastMonth } } },
+        { $group: { _id: null, total: { $sum: "$amount" } } }
+    ]);
+
+    const thisMonthTotal = thisMonthCollections[0]?.total || 0;
+    const lastMonthTotal = lastMonthCollections[0]?.total || 0;
+    const collectionGrowth = lastMonthTotal === 0 ? (thisMonthTotal > 0 ? 100 : 0) : Math.round(((thisMonthTotal - lastMonthTotal) / lastMonthTotal) * 100);
+
+    // 4. Total Plans & Growth
+    const totalPlans = await Plan.countDocuments();
+    const lastMonthPlans = await Plan.countDocuments({ 
+        createdAt: { $lt: firstDayThisMonth } 
+    });
+    const plansGrowth = lastMonthPlans === 0 ? 100 : Math.round(((totalPlans - lastMonthPlans) / lastMonthPlans) * 100);
+
+    // 5. Recent Chart Data (Last 7 Days)
     const last7Days = await CollectionEntry.aggregate([
       { $match: { collectionDate: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } },
       { $group: { 
@@ -45,12 +82,22 @@ router.get('/stats', async (req, res) => {
       { $sort: { "_id": 1 } }
     ]);
 
+    // 6. Recent Notifications
+    const recentNotifications = await Notification.find({})
+        .sort({ sentAt: -1 })
+        .limit(5);
+
     res.json({
       totalAgents,
+      agentsGrowth,
       totalCustomers,
-      totalPlans,
+      customersGrowth,
       todayCollection: todayCollections[0]?.total || 0,
-      chartData: last7Days
+      collectionGrowth,
+      totalPlans,
+      plansGrowth,
+      chartData: last7Days,
+      recentNotifications
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -236,9 +283,9 @@ router.get('/plans', async (req, res) => {
 // Get subscribers for a specific plan
 router.get('/plans/:id/subscribers', async (req, res) => {
   try {
-    // Use find with explicit casting just in case
+    const subscribers = await RDAccount.find({
       planId: new mongoose.Types.ObjectId(req.params.id) 
-
+    })
       .populate({
         path: 'customerId',
         populate: { path: 'userId', select: 'name email phone' }

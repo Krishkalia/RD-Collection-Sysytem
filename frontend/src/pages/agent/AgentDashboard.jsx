@@ -88,19 +88,40 @@ const AgentDashboard = () => {
             </div>
             
             <div className="col-lg-4">
-              <div className="card shadow-sm border-0 rounded-4 h-100 bg-primary text-white overflow-hidden position-relative">
+              <div className="card shadow-sm border-0 rounded-4 h-100 bg-primary text-white overflow-hidden position-relative mb-4">
                 <div className="card-body p-4 position-relative z-index-1">
                   <h5 className="fw-bold mb-3">Monthly Goal</h5>
-                  <p className="small mb-4 text-white-50">You've reached 65% of your ₹50k collection goal. Keep it up!</p>
+                  <p className="small mb-4 text-white-50">You've reached {stats?.goalProgress}% of your ₹{(stats?.monthlyGoal || 50000).toLocaleString()} collection goal. Keep it up!</p>
                   <div className="progress mb-3 bg-white bg-opacity-20" style={{ height: '8px' }}>
-                    <div className="progress-bar bg-white" style={{ width: '65%' }}></div>
+                    <div className="progress-bar bg-white" style={{ width: `${stats?.goalProgress}%` }}></div>
                   </div>
                   <div className="d-flex justify-content-between small fw-bold">
-                    <span>₹32,500</span>
-                    <span>₹50,000</span>
+                    <span>₹{stats?.monthCollection?.toLocaleString()}</span>
+                    <span>₹{(stats?.monthlyGoal || 50000).toLocaleString()}</span>
                   </div>
                 </div>
                 <Users size={120} className="position-absolute bottom-0 end-0 opacity-10 mb-n4 me-n4" />
+              </div>
+
+              <div className="card shadow-sm border-0 rounded-4 bg-white mt-4">
+                <div className="card-body p-4">
+                  <h5 className="fw-bold mb-3 text-dark">Recent Alerts</h5>
+                  <div className="list-group list-group-flush">
+                    {stats?.recentNotifications && stats.recentNotifications.length > 0 ? (
+                      stats.recentNotifications.map((notif, idx) => (
+                        <div key={notif._id} className={`list-group-item px-0 py-2 border-0 ${idx > 0 ? 'border-top' : ''}`}>
+                          <div className="d-flex w-100 justify-content-between">
+                            <h6 className="mb-1 fw-bold small text-primary">{notif.title}</h6>
+                            <small className="text-muted" style={{fontSize: '0.7rem'}}>{new Date(notif.sentAt).toLocaleDateString()}</small>
+                          </div>
+                          <p className="mb-0 text-muted extra-small">{notif.message}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="py-3 text-center text-muted small">No new notifications.</div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

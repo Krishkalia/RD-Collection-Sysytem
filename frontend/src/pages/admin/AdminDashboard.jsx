@@ -80,10 +80,10 @@ const AdminDashboard = () => {
 
       <div className="row g-4 mb-4">
         {[ 
-          { title: 'Total Agents', value: stats.totalAgents, color: 'text-primary', icon: <Users size={20}/> },
-          { title: 'Active Customers', value: stats.totalCustomers, color: 'text-success', icon: <UserCheck size={20}/> },
-          { title: "Today's Collection", value: `₹${stats.todayCollection.toLocaleString()}`, color: 'text-warning', icon: <IndianRupee size={20}/> },
-          { title: 'Total Plans', value: stats.totalPlans, color: 'text-info', icon: <Layers size={20}/> },
+          { title: 'Total Agents', value: stats.totalAgents, growth: stats.agentsGrowth, color: 'text-primary', icon: <Users size={20}/> },
+          { title: 'Active Customers', value: stats.totalCustomers, growth: stats.customersGrowth, color: 'text-success', icon: <UserCheck size={20}/> },
+          { title: "Today's Collection", value: `₹${(stats.todayCollection || 0).toLocaleString()}`, growth: stats.collectionGrowth, color: 'text-warning', icon: <IndianRupee size={20}/> },
+          { title: 'Total Plans', value: stats.totalPlans, growth: stats.plansGrowth, color: 'text-info', icon: <Layers size={20}/> },
         ].map((stat, idx) => (
           <div className="col-md-3" key={idx}>
             <div className="stat-card">
@@ -92,8 +92,9 @@ const AdminDashboard = () => {
                 <div className={`p-2 rounded-3 bg-light ${stat.color}`}>{stat.icon}</div>
               </div>
               <h3 className={`fw-bold mb-0`}>{loading ? '...' : stat.value}</h3>
-              <div className="small text-success mt-2">
-                <TrendingUp size={14} className="me-1" /> <span className="fw-medium">+12%</span> vs last month
+              <div className={`small mt-2 ${stat.growth >= 0 ? 'text-success' : 'text-danger'}`}>
+                <TrendingUp size={14} className={`me-1 ${stat.growth < 0 ? 'rotate-180' : ''}`} /> 
+                <span className="fw-medium">{stat.growth >= 0 ? '+' : ''}{stat.growth}%</span> vs last month
               </div>
             </div>
           </div>
@@ -132,22 +133,24 @@ const AdminDashboard = () => {
             <div className="card-body p-4">
               <h5 className="card-title fw-bold mb-4">Recent Alerts</h5>
               <div className="list-group list-group-flush">
-                <div className="list-group-item px-0 py-3 border-0">
-                  <div className="d-flex w-100 justify-content-between mb-1">
-                    <h6 className="mb-0 text-danger fw-bold small">Agent Inactive</h6>
-                    <small className="text-muted">3 mins ago</small>
-                  </div>
-                  <p className="mb-0 text-muted extra-small">Agent ID: AG204 hasn't synced today.</p>
-                </div>
-                <div className="list-group-item px-0 py-3 border-0 border-top">
-                  <div className="d-flex w-100 justify-content-between mb-1">
-                    <h6 className="mb-0 text-success fw-bold small">Plan Matured</h6>
-                    <small className="text-muted">1 hr ago</small>
-                  </div>
-                  <p className="mb-0 text-muted extra-small">Customer C300 RD plan reached maturity.</p>
-                </div>
+                {stats.recentNotifications && stats.recentNotifications.length > 0 ? (
+                  stats.recentNotifications.map((notif, idx) => (
+                    <div key={notif._id} className={`list-group-item px-0 py-3 border-0 ${idx > 0 ? 'border-top' : ''}`}>
+                      <div className="d-flex w-100 justify-content-between mb-1">
+                        <h6 className={`mb-0 fw-bold small ${
+                            notif.type === 'payment' ? 'text-success' : 
+                            notif.type === 'system' ? 'text-danger' : 'text-primary'
+                        }`}>{notif.title}</h6>
+                        <small className="text-muted">{new Date(notif.sentAt).toLocaleDateString()}</small>
+                      </div>
+                      <p className="mb-0 text-muted extra-small">{notif.message}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-3 text-center text-muted small">No recent alerts found.</div>
+                )}
               </div>
-              <button className="btn btn-light w-100 mt-3 btn-sm text-primary fw-bold">View All Notifications</button>
+              <button onClick={() => window.location.href='#/notifications'} className="btn btn-light w-100 mt-3 btn-sm text-primary fw-bold">View All Notifications</button>
             </div>
           </div>
         </div>

@@ -15,8 +15,19 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('rdToken');
         const userData = localStorage.getItem('rdUser');
         if (token && userData) {
-          setUser(JSON.parse(userData));
+          let parsedUser = JSON.parse(userData);
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          
+          // If user is a customer, fetch their profile photo
+          if (parsedUser.role === 'user') {
+            try {
+              const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/me`);
+              parsedUser = { ...parsedUser, profilePictureUrl: res.data.profilePictureUrl };
+            } catch (err) {
+              console.error('Failed to fetch initial profile data', err);
+            }
+          }
+          setUser(parsedUser);
         }
       } catch (err) {
         console.error('Auth initialization failed', err);
@@ -28,6 +39,12 @@ export const AuthProvider = ({ children }) => {
     };
     initAuth();
   }, []);
+
+  const updateUser = (data) => {
+    const updatedUser = { ...user, ...data };
+    setUser(updatedUser);
+    localStorage.setItem('rdUser', JSON.stringify(updatedUser));
+  };
 
 
   const login = async (email, password) => {
@@ -66,7 +83,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

@@ -9,6 +9,12 @@ const MyCustomers = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
+    const getFileUrl = (path) => {
+        if (!path) return null;
+        if (path.startsWith('http')) return path;
+        return `${import.meta.env.VITE_API_URL}${path}`;
+    };
+
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
@@ -58,11 +64,19 @@ const MyCustomers = () => {
                             <div className="card shadow-sm border-0 h-100 hover-shadow transition-all border-start border-4 border-primary">
                                 <div className="card-body p-4">
                                     <div className="d-flex align-items-center gap-3 mb-3">
-                                        <div className="bg-primary bg-opacity-10 p-2 rounded-circle">
-                                            <User size={24} className="text-primary" />
+                                        <div className="rounded-circle overflow-hidden d-flex align-items-center justify-content-center bg-primary bg-opacity-10 border border-primary border-1" style={{ width: 48, height: 48 }}>
+                                            {customer.profilePictureUrl ? (
+                                                <img 
+                                                    src={getFileUrl(customer.profilePictureUrl)} 
+                                                    alt={customer.userId?.name} 
+                                                    className="w-100 h-100 object-fit-cover"
+                                                />
+                                            ) : (
+                                                <User size={24} className="text-primary" />
+                                            )}
                                         </div>
                                         <div>
-                                            <h5 className="fw-bold mb-0">{customer.userId.name}</h5>
+                                            <h5 className="fw-bold mb-0">{customer.userId?.name}</h5>
                                             <small className="text-muted">{customer.phone}</small>
                                         </div>
                                     </div>

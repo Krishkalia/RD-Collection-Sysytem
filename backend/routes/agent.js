@@ -61,12 +61,25 @@ router.get('/stats', async (req, res) => {
         if (commissionRate > 5) rank = 'Gold';
         else if (commissionRate >= 3) rank = 'Silver';
 
+        // Recent Notifications for Agent
+        const Notification = require('../models/Notification');
+        const recentNotifications = await Notification.find({ userId: req.user.userId })
+            .sort({ sentAt: -1 })
+            .limit(5);
+
+        // Monthly Goal Progress (e.g., target ₹50,000)
+        const monthlyGoal = 50000;
+        const goalProgress = Math.min(100, Math.round(((monthCollections[0]?.total || 0) / monthlyGoal) * 100));
+
         res.json({
             assignedCustomers: customerCount,
             todayCollection: todayCollections[0]?.total || 0,
             monthCollection: monthCollections[0]?.total || 0,
             commissionRate,
-            rank
+            rank,
+            monthlyGoal,
+            goalProgress,
+            recentNotifications
         });
 
     } catch (err) {
