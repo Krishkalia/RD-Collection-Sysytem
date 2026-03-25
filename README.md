@@ -1,4 +1,4 @@
-# RD Collection System (Stitch)
+# RD Collection System
 
 A comprehensive investment and collection management system for RD (Recurring Deposit) operations. This project provides a unified platform for administrators, collection agents, and customers to manage deposits, plans, and commissions.
 
